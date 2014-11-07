@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "backbone": ">=0.9.9 <=1.1.2",
+    "backbone.base-router": "^0.4.1",
     "underscore": ">=1.4.4 <=1.7.0"
   },
   "devDependencies": {

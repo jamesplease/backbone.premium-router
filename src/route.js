@@ -4,7 +4,7 @@
 // with URIs. With StateRouter, Routes are associated with URIs.
 //
 
-var Route = function() {};
+var Route = Backbone.Route = function() {};
 
 function onFail(e) {
   if (!console || !console.assert) { return; }

@@ -3,7 +3,7 @@
 // A router that manages application flow
 //
 
-var StateRouter = BaseRouter.extend({
+var StateRouter = Backbone.StateRouter = Backbone.BaseRouter.extend({
   onNavigate: function(routeData) {
     var newRoute = routeData.linked;
 

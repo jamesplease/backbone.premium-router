@@ -59,16 +59,16 @@ module.exports = function(grunt) {
         },
         src: ['src/*.js', '!src/wrapper.js']
       },
-      // tests: {
-      //   options: {
-      //     jshintrc: 'test/.jshintrc'
-      //   },
-      //   src: ['test/spec/*.js']
-      // }
+      tests: {
+        options: {
+          jshintrc: 'test/.jshintrc'
+        },
+        src: ['test/unit/*.js']
+      }
     },
 
     mochaTest: {
-      spec: {
+      unit: {
         options: {
           require: 'test/setup/node.js',
           reporter: 'dot',
@@ -77,7 +77,7 @@ module.exports = function(grunt) {
         },
         src: [
           'test/setup/helpers.js',
-          'test/spec/*.js'
+          'test/unit/*.js'
         ]
       }
     },
@@ -126,7 +126,7 @@ module.exports = function(grunt) {
         options: {
           spawn: false
         },
-        files: ['src/**/*.js', 'test/spec/**/*.js'],
+        files: ['src/**/*.js', 'test/unit/**/*.js'],
         tasks: ['test']
       }
     }
