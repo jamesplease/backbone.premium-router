@@ -14,5 +14,6 @@ function onFail(e) {
 _.extend(Route.prototype, Backbone.Events, {
   show: function() {},
   onFetchError: onFail,
-  onShowError: onFail
+  onShowError: onFail,
+  extend: Backbone.Model.extend
 });
