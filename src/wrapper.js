@@ -15,11 +15,10 @@
 }(this, function(Backbone, _) {
   'use strict';
 
-  // @include backbone.state-route.js
+  // @include backbone.route.js
   // @include backbone.state-router.js
 
-  BaseRouter.Route = Backbone.Route = Route;
-  Backbone.StateRouter = StateRouter;
+  Backbone.StateRouter.Route = Route;
 
-  return StateRouter;
+  return Backbone.StateRouter;
 }));

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "backbone": ">=0.9.9 <=1.1.2",
+    "backbone.base-router": "^0.4.1",
     "underscore": ">=1.4.4 <=1.7.0"
   },
   "devDependencies": {
@@ -39,6 +40,8 @@
     "grunt-mocha-test": "^0.11.0",
     "grunt-preprocess": "4.0.0",
     "grunt-template": "^0.2.3",
+    "jquery": "^2.1.1",
+    "jsdom": "^1.2.0",
     "load-grunt-tasks": "^0.4.0",
     "mocha": "^1.20.1",
     "sinon": "^1.10.2",
