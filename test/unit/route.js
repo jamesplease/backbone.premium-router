@@ -1,7 +1,8 @@
 import ObjectRouter from '../../src/router';
+import Route from '../../src/route';
 
-describe('A feature test', () => {
-  it('should have a route property', () => {
-    expect(ObjectRouter.Route).to.exist;
+describe('the Router', () => {
+  it('should have the Route attached to it', () => {
+    expect(ObjectRouter.Route).to.deep.equal(Route);
   });
 });

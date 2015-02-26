@@ -4,52 +4,58 @@ import BaseRouter from 'backbone.base-router';
 import Route from './route';
 
 var ObjectRouter = BaseRouter.extend({
+
+  // The ObjectRouter provides the ability for a Route
+  // to cancel a navigation if it is not fit to be exited.
+  // This is useful to ensure that a user does not, for instance,
+  // leave a model unsaved.
+  navigate: function(fragment, options) {
+
+    // If there is a current route, then we are
+    // given the opportunity to cancel the navigation
+    if (_.result(this.currentRoute, 'preventNavigation')) {
+      return this;
+    }
+
+    Bb.history.navigate(fragment, options);
+    return this;
+  },
+
+  // The BaseRouter provides us a single point of
+  // entry anytime a route is matched by BB.history
   onNavigate(routeData) {
-    var newRoute = routeData.linked;
 
-    if (!(newRoute instanceof Route)) {
-      throw new Error('A Route object must be associated with each route.');
-    }
+    // Create a new route each time we navigate
+    var newRoute = new routeData.linked();
 
-    var redirect = newRoute.redirect;
-    if (_.isFunction(redirect)) { redirect = redirect(routeData); }
-    if (_.isString(redirect)) {
-      this.navigate(redirect, {trigger:true});
-      newRoute.trigger('redirect', routeData);
-      this.trigger('redirect', routeData);
-      return;
-    }
+    // Store the route we're trying to transition to. This lets
+    // us know if the user transitions away at a later time.
+    this._transitioningTo = newRoute;
 
-    if (this.authenticate && !this.authenticate(routeData)) {
-      newRoute.trigger('unauthorized', routeData);
-      this.trigger('unauthorized', routeData);
-      return;
-    }
+    newRoute.trigger('before:fetch');
+    Promise.resolve(newRoute.fetch).then((fetchData) => {
+      this._onFetch(newRoute, fetchData, routeData);
+    });
+  },
 
-    if (this.currentRoute) {
-      this.currentRoute.trigger('exit', routeData);
-    }
+  _onFetch(newRoute, fetchData, routeData) {
+
+    // Anytime the developer has an opportunity to navigate again,
+    // we need to check if they have. If they have, then we stop.
+    if (this._transitioningTo !== newRoute) { return; }
+
+    // Trigger the fetch method on the route
+    newRoute.trigger('fetch');
+    if (this._transitioningTo !== newRoute) { return; }
+    this.currentRoute.trigger('exit');
+    if (this._transitioningTo !== newRoute) { return; }
     this.currentRoute = newRoute;
-    newRoute.trigger('enter', routeData);
+    this.currentRoute.trigger('enter', routeData);
 
-    if (!newRoute.fetch) {
-      newRoute.show(undefined, routeData);
-      newRoute.trigger('show', routeData);
-    } else {
-
-      // Wait for the data to come back, then
-      // show the view if the route is still active.
-      Promise.resolve(newRoute.fetch(routeData))
-        .then(data => {
-          newRoute.trigger('fetch', routeData, data);
-          if (newRoute !== this.currentRoute) { return; }
-          newRoute.show(data, routeData);
-          newRoute.trigger('show', routeData);
-        })
-        .catch(e => {
-          if (newRoute !== this.currentRoute) { return; }
-          newRoute.trigger('error', e, routeData);
-        });
+    // We can now delete the internal reference to this transition,
+    // if we still have it, as the transition is complete.
+    if (this._transitioningTo === newRoute) {
+      delete this._transitioningTo;
     }
   }
 });
