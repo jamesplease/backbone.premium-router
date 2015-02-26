@@ -1,8 +1,8 @@
 {
-  "name": "backbone.object-router",
+  "name": "backbone.premium-router",
   "version": "0.0.1",
-  "description": "A much better Router for Backbone.",
-  "main": "dist/backbone.object-router.js",
+  "description": "A premium routing solution for Backbone.",
+  "main": "dist/backbone.premium-router.js",
   "scripts": {
     "test": "gulp",
     "test-browser": "gulp test-browser",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jmeas/backbone.object-router.git"
+    "url": "https://github.com/jmeas/backbone.premium-router.git"
   },
   "keywords": [
     "backbone",
@@ -25,9 +25,9 @@
   "author": "Jmeas",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jmeas/backbone.object-router/issues"
+    "url": "https://github.com/jmeas/backbone.premium-router/issues"
   },
-  "homepage": "https://github.com/jmeas/backbone.object-router",
+  "homepage": "https://github.com/jmeas/backbone.premium-router",
   "devDependencies": {
     "babel": "^4.3.0",
     "babelify": "^5.0.3",
@@ -63,7 +63,7 @@
   },
   "babelBoilerplateOptions": {
     "entryFileName": "router",
-    "exportVarName": "ObjectRouter",
+    "exportVarName": "PremiumRouter",
     "mochaGlobals": [
       "stub",
       "spy",

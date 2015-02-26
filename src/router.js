@@ -3,9 +3,9 @@ import Bb from 'backbone';
 import BaseRouter from 'backbone.base-router';
 import Route from './route';
 
-var ObjectRouter = BaseRouter.extend({
+var PremiumRouter = BaseRouter.extend({
 
-  // The ObjectRouter provides the ability for a Route
+  // The PremiumRouter provides the ability for a Route
   // to cancel a navigation if it is not fit to be exited.
   // This is useful to ensure that a user does not, for instance,
   // leave a model unsaved.
@@ -100,8 +100,8 @@ var ObjectRouter = BaseRouter.extend({
   }
 });
 
-ObjectRouter.Route = Route;
+PremiumRouter.Route = Route;
 
-Bb.ObjectRouter = ObjectRouter;
+Bb.PremiumRouter = PremiumRouter;
 
-export default ObjectRouter;
+export default PremiumRouter;

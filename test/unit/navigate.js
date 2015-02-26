@@ -1,11 +1,11 @@
 import Bb from 'backbone';
-import ObjectRouter from '../../src/router';
+import PremiumRouter from '../../src/router';
 import Route from '../../src/route';
 
 var router, route;
 describe('navigate', () => {
   beforeEach(() => {
-    router = new ObjectRouter();
+    router = new PremiumRouter();
     route = new Route({ router });
   });
 
