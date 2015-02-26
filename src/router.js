@@ -13,7 +13,7 @@ var ObjectRouter = BaseRouter.extend({
 
     // If there is a current route, then we are
     // given the opportunity to cancel the navigation
-    if (_.result(this.currentRoute, 'preventNavigation')) {
+    if (_.result(this.currentRoute, 'preventNavigation') === true) {
       return this;
     }
 
@@ -26,37 +26,77 @@ var ObjectRouter = BaseRouter.extend({
   onNavigate(routeData) {
 
     // Create a new route each time we navigate
-    var newRoute = new routeData.linked();
+    var newRoute = new routeData.linked({
+      router: this
+    });
+
+    // Remove unnecessary pieces from the routeData
+    routeData = _.pick(routeData, 'params', 'query', 'uriFragment');
 
     // Store the route we're trying to transition to. This lets
     // us know if the user transitions away at a later time.
     this._transitioningTo = newRoute;
 
-    newRoute.trigger('before:fetch');
-    Promise.resolve(newRoute.fetch).then((fetchData) => {
-      this._onFetch(newRoute, fetchData, routeData);
-    });
+    newRoute.trigger('before:fetch', routeData);
+
+    // Coerce the fetch method to a promise, so that it can be sync or async.
+    return Promise.resolve(newRoute.fetch(routeData))
+
+      // If it's successful, then we move along to the `_onFetch` callback.
+      .then(fetchData => {
+        this._onFetch(newRoute, fetchData, routeData);
+      })
+
+      // If there are errors at any time, then we look for an `onError`
+      // method of the Route. If it exists, we execute it; otherwise, we
+      // use the Router's `onError` callback.
+      .catch(e => {
+        if (newRoute.onError) {
+          newRoute.onError(e, routeData);
+        } else {
+          this.onError(e, routeData);
+        }
+      });
   },
 
   _onFetch(newRoute, fetchData, routeData) {
 
     // Anytime the developer has an opportunity to navigate again,
     // we need to check if they have. If they have, then we stop.
+    // As you can see below, we must do this check multiple times in
+    // this callback.
     if (this._transitioningTo !== newRoute) { return; }
 
     // Trigger the fetch method on the route
-    newRoute.trigger('fetch');
+    newRoute.trigger('fetch', routeData, fetchData);
     if (this._transitioningTo !== newRoute) { return; }
-    this.currentRoute.trigger('exit');
+
+    // Trigger the exit method on the current route,
+    // if it exists
+    if (this.currentRoute) {
+      this.currentRoute.trigger('exit');
+    }
     if (this._transitioningTo !== newRoute) { return; }
+
     this.currentRoute = newRoute;
-    this.currentRoute.trigger('enter', routeData);
+    this.currentRoute.trigger('enter', routeData, fetchData);
 
     // We can now delete the internal reference to this transition,
     // if we still have it, as the transition is complete.
     if (this._transitioningTo === newRoute) {
       delete this._transitioningTo;
     }
+  },
+
+  // The error callback is executed whenever there
+  // is an unhandled exception in your Route.
+  // You can specify an `onError` callback in a
+  // route for per-route handling, or override this method
+  // to modify the default handling of errors.
+  onError(e, routeData) {
+    if (!console) { return this; }
+    console.assert(false, e, e.stack);
+    return this;
   }
 });
 

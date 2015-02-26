@@ -7,7 +7,6 @@ import Bb from 'backbone';
 // calling a series of callbacks.
 var Route = function(options) {
   this._router = options.router;
-  this.queryRefresh = false;
 };
 
 _.extend(Route.prototype, {
@@ -16,26 +15,9 @@ _.extend(Route.prototype, {
   // be asynchronous.
   fetch() {},
 
-  // The show method is an opportunity to
-  // display a view somewhere.
-  show() {},
-
-  // Whether or not we should transition out of
-  // this state. Execute `cancel` to prevent
-  // the transition.
-  preventNavigation() {},
-
   navigate(url, options) {
     this._router.navigate(url, options);
-  },
-
-  // The error callback is executed whenever there
-  // is an unhandled exception in your Route. Override
-  // this behavior if you would rather handle it
-  // in some other way.
-  onError(e) {
-    if (!console) { return; }
-    console.assert(false, e, e.stack);
+    return this;
   }
 }, Bb.Events);
 
