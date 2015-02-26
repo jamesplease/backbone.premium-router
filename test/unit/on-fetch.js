@@ -1,4 +1,4 @@
-import ObjectRouter from '../../src/router';
+import PremiumRouter from '../../src/router';
 import Route from '../../src/route';
 
 var router, currentRoute, newRoute, thirdRoute;
@@ -8,7 +8,7 @@ var router, currentRoute, newRoute, thirdRoute;
 // to test it in isolation in a synchronous environment.
 describe('_onFetch', () => {
   beforeEach(() => {
-    router = new ObjectRouter();
+    router = new PremiumRouter();
     currentRoute = new Route({ router });
     newRoute = new Route({ router });
     thirdRoute = new Route({ router });

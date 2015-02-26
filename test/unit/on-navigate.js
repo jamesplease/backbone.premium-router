@@ -1,10 +1,10 @@
-import ObjectRouter from '../../src/router';
+import PremiumRouter from '../../src/router';
 import Route from '../../src/route';
 
 var router, fetchStub, originalFetch;
-describe('ObjectRouter', () => {
+describe('PremiumRouter', () => {
   beforeEach(() => {
-    router = new ObjectRouter();
+    router = new PremiumRouter();
   });
 
   describe('when transitioning away in `fetch`', () => {
