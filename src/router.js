@@ -13,11 +13,10 @@ var ObjectRouter = BaseRouter.extend({
 
     // If there is a current route, then we are
     // given the opportunity to cancel the navigation
-    if (_.result(this.currentRoute, 'preventNavigation') === true) {
-      return this;
+    if (_.result(this.currentRoute, 'preventNavigation') !== true) {
+      Bb.history.navigate(fragment, options);
     }
 
-    Bb.history.navigate(fragment, options);
     return this;
   },
 
@@ -94,8 +93,9 @@ var ObjectRouter = BaseRouter.extend({
   // route for per-route handling, or override this method
   // to modify the default handling of errors.
   onError(e, routeData) {
-    if (!console) { return this; }
-    console.assert(false, e, e.stack);
+    if (typeof console === 'object') {
+      console.error(e, e.stack);
+    }
     return this;
   }
 });
